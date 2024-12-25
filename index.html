@@ -6,26 +6,24 @@
     <title>607庚的可愛世界</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #FFD6E7, #B6F2F2);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
-            text-align: center;
         }
 
         h1 {
-            font-size: 2.5em;
             margin-top: 20px;
         }
 
         nav button {
             margin: 10px;
             padding: 10px 20px;
-            font-size: 1.2em;
+            background-color: #ff6f61;
+            color: #fff;
             border: none;
-            border-radius: 20px;
-            background: #FFB6C1;
-            color: white;
+            border-radius: 5px;
             cursor: pointer;
         }
 
@@ -34,16 +32,33 @@
             margin: 20px 0;
         }
 
-        textarea, input {
+        textarea, input[type="password"] {
+            width: 80%;
             padding: 10px;
-            margin-top: 10px;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 80%;
         }
 
         button {
-            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #messages div {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f1f1f1;
         }
     </style>
 </head>
@@ -63,14 +78,16 @@
     <!-- 留言板 -->
     <div id="message-board-section" class="section">
         <h2>留言板</h2>
-        <div id="messages">這裡是留言區。</div>
-        <textarea id="message-input" placeholder="按 Enter 發佈留言"></textarea>
+        <div id="messages"></div>
+        <textarea id="message-input" placeholder="按 Enter 或點擊按鈕發佈留言"></textarea>
+        <button onclick="postMessage()">發佈留言</button>
     </div>
 
     <!-- 密碼輸入 -->
     <div>
         <h3>進入編輯模式</h3>
-        <input id="password-input" type="password" placeholder="輸入密碼並按 Enter">
+        <input id="password-input" type="password" placeholder="輸入密碼並按 Enter 或點擊按鈕">
+        <button onclick="checkPassword()">確認密碼</button>
     </div>
 
     <script>
@@ -95,35 +112,46 @@
             document.getElementById(id).style.display = 'block';
         }
 
+        // 密碼確認
+        function checkPassword() {
+            const passwordInput = document.getElementById('password-input').value.trim();
+            if (passwordInput === editPassword) {
+                alert('成功進入編輯模式！');
+                isEditMode = true;
+            } else {
+                alert('密碼錯誤！');
+            }
+            document.getElementById('password-input').value = ''; // 清空輸入框
+        }
+
         // 監聽密碼框的 Enter 鍵
         document.getElementById('password-input').addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
-                const input = e.target.value;
-                if (input === editPassword) {
-                    alert('成功進入編輯模式！');
-                    isEditMode = true;
-                } else {
-                    alert('密碼錯誤！');
-                }
-                e.target.value = ''; // 清空輸入框
+                checkPassword();
             }
         });
 
         // 發佈留言
+        function postMessage() {
+            const messageInput = document.getElementById('message-input').value.trim();
+            if (messageInput) {
+                db.collection('messages').add({
+                    content: messageInput,
+                    timestamp: new Date()
+                }).then(() => {
+                    alert('留言發佈成功！');
+                }).catch(error => {
+                    console.error('留言發佈失敗:', error);
+                });
+            }
+            document.getElementById('message-input').value = ''; // 清空輸入框
+        }
+
+        // 監聽留言框的 Enter 鍵
         document.getElementById('message-input').addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
-                const messageInput = e.target.value.trim();
-                if (messageInput) {
-                    db.collection('messages').add({
-                        content: messageInput,
-                        timestamp: new Date()
-                    }).then(() => {
-                        alert('留言發佈成功！');
-                    }).catch(error => {
-                        console.error('留言發佈失敗:', error);
-                    });
-                }
-                e.target.value = ''; // 清空輸入框
+                e.preventDefault(); // 阻止換行
+                postMessage();
             }
         });
 
@@ -150,7 +178,7 @@
 
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000)) / 1000);
 
                 countdownElement.textContent = `${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
