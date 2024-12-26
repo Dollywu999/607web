@@ -4,201 +4,414 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>607庚的可愛世界</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #ffd6e7;
+            --accent-color: #ffb7d5;
+            --text-color: #805b6c;
+            --button-hover: #ff85c2;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f9f9f9;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fff5f8;
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
         }
 
         h1 {
-            margin-top: 20px;
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         nav button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #ff6f61;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: white;
             border: none;
-            border-radius: 5px;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 158, 205, 0.3);
+        }
+
+        nav button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 158, 205, 0.4);
         }
 
         .section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 30px rgba(255, 158, 205, 0.15);
             display: none;
+        }
+
+        #countdown {
+            font-size: 2em;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .message-input-container {
+            position: relative;
             margin: 20px 0;
         }
 
-        textarea, input[type="password"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 15px;
+            font-size: 1em;
+            color: var(--text-color);
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
         }
 
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
+        textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .message-button {
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
             cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .message-button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        #messages {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         #messages div {
-            margin: 5px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f1f1f1;
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 5px 0;
+            animation: fadeIn 0.5s ease;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .password-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(255, 158, 205, 0.15);
+        }
+
+        .password-section input {
+            width: 80%;
+            max-width: 300px;
+            padding: 12px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 25px;
+            font-size: 1em;
+            color: var(--text-color);
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .password-section input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 158, 205, 0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-upload-area {
+            border: 3px dashed var(--secondary-color);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 214, 231, 0.1);
+        }
+
+        .photo-upload-area input {
+            display: none;
+        }
+
+        .delete-photo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: #ff4444;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .photo-item:hover .delete-photo {
+            display: flex;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--secondary-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 照片預覽模態框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+        }
+
+        /* 裝飾元素 */
+        .decoration {
+            position: fixed;
+            font-size: 2em;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .decoration:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .decoration:nth-child(2) { top: 20%; right: 5%; animation-delay: 0.5s; }
+        .decoration:nth-child(3) { bottom: 10%; left: 8%; animation-delay: 1s; }
+        .decoration:nth-child(4) { bottom: 15%; right: 8%; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            nav button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            #countdown {
+                font-size: 1.5em;
+            }
         }
     </style>
-</head>
-<body>
-    <!-- Firebase SDK - 移到最前面 -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+</head><body>
+    <!-- 裝飾元素 -->
+    <div class="decoration">🌸</div>
+    <div class="decoration">✨</div>
+    <div class="decoration">🎀</div>
+    <div class="decoration">💖</div>
 
-        // Your web app's Firebase configuration
+    <div class="container">
+        <h1>✨ 歡迎來到 607 的世界！ ✨</h1>
+
+        <nav>
+            <button onclick="showSection('countdown-section')">⏰ 倒數計時</button>
+            <button onclick="showSection('message-board-section')">💌 留言板</button>
+            <button onclick="showSection('photo-album-section')">📸 班級相簿</button>
+        </nav>
+
+        <!-- 倒數計時區域 -->
+        <div id="countdown-section" class="section">
+            <h2>🎉 倒數計時 🎉</h2>
+            <div id="countdown">載入中...</div>
+        </div>
+
+        <!-- 留言板區域 -->
+        <div id="message-board-section" class="section">
+            <h2>💝 留言板 💝</h2>
+            <div id="messages"></div>
+            <div class="message-input-container">
+                <textarea id="message-input" placeholder="寫下你的留言吧！按 Enter 或點擊按鈕發佈 ✨"></textarea>
+                <button onclick="postMessage()" class="message-button">發佈留言 💖</button>
+            </div>
+        </div>
+
+        <!-- 班級相簿區域 -->
+        <div id="photo-album-section" class="section">
+            <h2>📸 班級相簿 📸</h2>
+            <div id="upload-area" class="photo-upload-area" style="display: none;">
+                <input type="file" id="photo-upload" accept="image/*" multiple>
+                <button class="upload-button" onclick="document.getElementById('photo-upload').click()">
+                    選擇照片上傳 ✨
+                </button>
+                <p style="color: var(--text-color);">可以一次選擇多張照片喔！</p>
+            </div>
+            <div id="photo-grid" class="photo-grid"></div>
+        </div>
+
+        <!-- 照片預覽模態框 -->
+        <div id="photo-modal" class="modal" onclick="closeModal()">
+            <img id="modal-img" src="" alt="放大預覽">
+        </div>
+
+        <!-- 密碼區域 -->
+        <div class="password-section">
+            <h3>🔐 進入編輯模式 🔐</h3>
+            <input id="password-input" type="password" placeholder="輸入神秘密碼">
+            <button onclick="checkPassword()" class="message-button">確認密碼 ✨</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } 
+          from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, listAll, getDownloadURL, deleteObject } 
+          from "https://www.gstatic.com/firebasejs/11.1.0/firebase-storage.js";
+
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB_r4w3pb1ZIO8YUCA9Yl9IITSHZi3cCiI",
             authDomain: "class-6bb0b.firebaseapp.com",
             projectId: "class-6bb0b",
-            storageBucket: "class-6bb0b.appspot.com",
-            messagingSenderId: "709913685558",
-            appId: "1:709913685558:web:925486cd1b5b9f99527297"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // 將 Firebase 相關函數掛載到 window 對象上，以便全局訪問
-        window.postMessage = async function() {
-            const messageInput = document.getElementById('message-input');
-            const content = messageInput.value.trim();
-            
-            if (content) {
-                try {
-                    await addDoc(collection(db, 'messages'), {
-                        content: content,
-                        timestamp: new Date()
-                    });
-                    alert('留言發佈成功！');
-                    messageInput.value = '';
-                } catch (error) {
-                    console.error('留言發佈失敗:', error);
-                }
-            }
-        };
-
-        // 即時更新留言板
-        const q = collection(db, 'messages');
-        onSnapshot(q, (snapshot) => {
-            const messagesContainer = document.getElementById('messages');
-            messagesContainer.innerHTML = '';
-            snapshot.forEach((doc) => {
-                const message = doc.data();
-                const messageElement = document.createElement('div');
-                messageElement.textContent = message.content;
-                messagesContainer.appendChild(messageElement);
-            });
-        });
-    </script>
-
-    <h1>歡迎來到 607 的世界！</h1>
-    <nav>
-        <button onclick="showSection('countdown-section')">倒數計時</button>
-        <button onclick="showSection('message-board-section')">留言板</button>
-    </nav>
-
-    <!-- 倒數計時 -->
-    <div id="countdown-section" class="section">
-        <h2>倒數計時：</h2>
-        <div id="countdown">載入中...</div>
-    </div>
-
-    <!-- 留言板 -->
-    <div id="message-board-section" class="section">
-        <h2>留言板</h2>
-        <div id="messages"></div>
-        <textarea id="message-input" placeholder="按 Enter 或點擊按鈕發佈留言"></textarea>
-        <button onclick="postMessage()">發佈留言</button>
-    </div>
-
-    <!-- 密碼輸入 -->
-    <div>
-        <h3>進入編輯模式</h3>
-        <input id="password-input" type="password" placeholder="輸入密碼並按 Enter 或點擊按鈕">
-        <button onclick="checkPassword()">確認密碼</button>
-    </div>
-
-    <script>
-        const editPassword = "607happyforever"; // 編輯模式密碼
-        let isEditMode = false;
-
-        // 顯示區域
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-        }
-
-        // 密碼確認
-        function checkPassword() {
-            const passwordInput = document.getElementById('password-input').value.trim();
-            if (passwordInput === editPassword) {
-                alert('成功進入編輯模式！');
-                isEditMode = true;
-            } else {
-                alert('密碼錯誤！');
-            }
-            document.getElementById('password-input').value = ''; // 清空輸入框
-        }
-
-        // 監聽密碼框的 Enter 鍵
-        document.getElementById('password-input').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
-        // 監聽留言框的 Enter 鍵
-        document.getElementById('message-input').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // 阻止換行
-                postMessage();
-            }
-        });
-
-        // 倒數計時
-        function startCountdown() {
-            const countdownElement = document.getElementById('countdown');
-            const eventDate = new Date('2025-01-01T00:00:00').getTime();
-
-            setInterval(() => {
-                const now = new Date().getTime();
-                const timeLeft = eventDate - now;
-
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000)) / 1000);
-
-                countdownElement.textContent = `${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
-            }, 1000);
-        }
-
-        startCountdown();
-    </script>
-</body>
-</html>
+            storageBucket: "class-6bb0b.fire</antArtifact>
