@@ -63,6 +63,59 @@
     </style>
 </head>
 <body>
+    <!-- Firebase SDK - 移到最前面 -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_r4w3pb1ZIO8YUCA9Yl9IITSHZi3cCiI",
+            authDomain: "class-6bb0b.firebaseapp.com",
+            projectId: "class-6bb0b",
+            storageBucket: "class-6bb0b.appspot.com",
+            messagingSenderId: "709913685558",
+            appId: "1:709913685558:web:925486cd1b5b9f99527297"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 將 Firebase 相關函數掛載到 window 對象上，以便全局訪問
+        window.postMessage = async function() {
+            const messageInput = document.getElementById('message-input');
+            const content = messageInput.value.trim();
+            
+            if (content) {
+                try {
+                    await addDoc(collection(db, 'messages'), {
+                        content: content,
+                        timestamp: new Date()
+                    });
+                    alert('留言發佈成功！');
+                    messageInput.value = '';
+                } catch (error) {
+                    console.error('留言發佈失敗:', error);
+                }
+            }
+        };
+
+        // 即時更新留言板
+        const q = collection(db, 'messages');
+        onSnapshot(q, (snapshot) => {
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const message = doc.data();
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message.content;
+                messagesContainer.appendChild(messageElement);
+            });
+        });
+    </script>
+
     <h1>歡迎來到 607 的世界！</h1>
     <nav>
         <button onclick="showSection('countdown-section')">倒數計時</button>
@@ -91,18 +144,6 @@
     </div>
 
     <script>
-        // Firebase 初始化
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_r4w3pb1ZIO8YUCA9Yl9IITSHZi3cCiI",
-            authDomain: "class-6bb0b.firebaseapp.com",
-            projectId: "class-6bb0b",
-            storageBucket: "class-6bb0b.appspot.com",
-            messagingSenderId: "709913685558",
-            appId: "1:709913685558:web:925486cd1b5b9f99527297"
-        };
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
         const editPassword = "607happyforever"; // 編輯模式密碼
         let isEditMode = false;
 
@@ -131,40 +172,12 @@
             }
         });
 
-        // 發佈留言
-        function postMessage() {
-            const messageInput = document.getElementById('message-input').value.trim();
-            if (messageInput) {
-                db.collection('messages').add({
-                    content: messageInput,
-                    timestamp: new Date()
-                }).then(() => {
-                    alert('留言發佈成功！');
-                }).catch(error => {
-                    console.error('留言發佈失敗:', error);
-                });
-            }
-            document.getElementById('message-input').value = ''; // 清空輸入框
-        }
-
         // 監聽留言框的 Enter 鍵
         document.getElementById('message-input').addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault(); // 阻止換行
                 postMessage();
             }
-        });
-
-        // 即時更新留言板
-        db.collection('messages').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
-            const messagesContainer = document.getElementById('messages');
-            messagesContainer.innerHTML = '';
-            snapshot.forEach(doc => {
-                const message = doc.data();
-                const messageElement = document.createElement('div');
-                messageElement.textContent = message.content;
-                messagesContainer.appendChild(messageElement);
-            });
         });
 
         // 倒數計時
@@ -187,9 +200,6 @@
 
         startCountdown();
     </script>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </body>
 </html>
+ 
